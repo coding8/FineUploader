@@ -1,0 +1,95 @@
+﻿<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="~/Scripts/jquery.fineuploader-4.1.0.js" type="text/javascript"></script>
+<link href="~/Scripts/fineuploader-4.1.0.css" rel="stylesheet" />
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var manualuploader = $('#manual-fine-uploader').fineUploader({
+            request: { endpoint: '/Home/Index' },
+            validation: {
+                itemLimit: 3,
+                allowedExtensions: ['jpg', 'xlsx', 'txt'],
+                sizeLimit: 1024000 // 60 kB = 60 * 1024 bytes
+            },
+            template: "qq-template-manual-noedit",
+            autoUpload: false,
+            callbacks:
+
+            {
+                //文件开始提交
+                onSubmit: function (id, fileName) {
+                    alert('this is  onSubmit Function');
+                    $('#messages').append('<div id="file-' + id + '" class="alert" style="margin: 20px 0 0"></div>');
+
+                },
+                //文件开始上传
+                onUpload: function (id, fileName) {
+
+                    $('#file-' + id).addClass('alert-info')
+
+                                    .html('<img src="../../Scripts/loading.gif" alt="Initializing. Please hold."> ' +
+
+                                    'Initializing ' +
+
+                                    '“' + fileName + '”');
+
+                },
+                //文件上传成功
+                onComplete: function (id, fileName, responseJSON) {
+                    alert('This is onComplete function.');
+                    alert(responseJSON);//what is this?
+                }
+            }
+        });
+
+        $('#triggerUpload').click(function () {
+            manualuploader.fineUploader('uploadStoredFiles');
+        });
+    });
+</script>
+<!-- Fine Uploader template
+====================================================================== -->
+<script type="text/template" id="qq-template-manual-noedit">
+    <div class="qq-uploader-selector qq-uploader">
+        <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
+            <span>Drop files here to upload</span>
+        </div>
+        <div class="qq-upload-button-selector qq-upload-button">
+            <div>Upload a file</div>
+        </div>
+        <span class="qq-drop-processing-selector qq-drop-processing">
+            <span>Processing dropped files...</span>
+            <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
+        </span>
+        <ul class="qq-upload-list-selector qq-upload-list">
+            <li>
+                @*  <div class="qq-progress-bar-container-selector">
+                    <div class="qq-progress-bar-selector qq-progress-bar"></div>
+                </div>*@
+                <span class="qq-upload-spinner-selector qq-upload-spinner"></span>
+                <span class="qq-upload-file-selector qq-upload-file"></span>
+                <span class="qq-upload-size-selector qq-upload-size"></span>
+                <a class="qq-upload-cancel-selector qq-upload-cancel" href="#">Cancel</a>
+                <span class="qq-upload-status-text-selector qq-upload-status-text"></span>
+            </li>
+        </ul>
+    </div>
+</script>
+
+<style type="text/css">
+    .btn {
+        background-color: #F87436;
+        background-image: -moz-linear-gradient(center top, #F88D5A, #E65C47);
+        color: #FFFFFF;
+        text-shadow: none;
+        display: inline-block;
+        cursor: pointer;
+    }
+</style>
+<!-- Fine Uploader DOM Element
+====================================================================== -->
+<div id="manual-fine-uploader"></div>
+<div id="triggerUpload" class="btn btn-primary" style="margin-top: 10px;">
+    Upload now
+</div>
+<div id="messages"></div>
