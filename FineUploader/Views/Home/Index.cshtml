@@ -7,9 +7,9 @@
         var manualuploader = $('#manual-fine-uploader').fineUploader({
             request: { endpoint: '/Home/Index' },
             validation: {
-                itemLimit: 3,
-                allowedExtensions: ['jpg', 'xlsx', 'txt'],
-                sizeLimit: 1024000 // 60 kB = 60 * 1024 bytes
+                //itemLimit: 3,
+                //allowedExtensions: ['jpg', 'xlsx', 'txt'],
+                //sizeLimit: 1024000 // 60 kB = 60 * 1024 bytes
             },
             template: "qq-template-manual-noedit",
             autoUpload: false,
@@ -18,8 +18,8 @@
             {
                 //文件开始提交
                 onSubmit: function (id, fileName) {
-                    alert('this is  onSubmit Function');
-                    $('#messages').append('<div id="file-' + id + '" class="alert" style="margin: 20px 0 0"></div>');
+                    //alert('this is  onSubmit Function');
+                    //$('#messages').append('<div id="file-' + id + '" class="alert" style="margin: 20px 0 0"></div>');
 
                 },
                 //文件开始上传
@@ -36,8 +36,11 @@
                 },
                 //文件上传成功
                 onComplete: function (id, fileName, responseJSON) {
-                    alert('This is onComplete function.');
-                    alert(responseJSON);//what is this?
+                    //alert('This is onComplete function.');
+                    //alert(responseJSON.name);//responseJSON就是controller传来的return Json
+                    $.get('/Home/Test' + "?time=" + new Date().getTime(), function (data) {
+                        alert('THis is"onComplete",the "data" from TestAction:' + data);
+                    });
                 }
             }
         });
